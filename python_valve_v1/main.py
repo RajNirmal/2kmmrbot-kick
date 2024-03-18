@@ -2,6 +2,7 @@ from steam.client import SteamClient
 from dota2.client import Dota2Client
 from dota2.enums import EDOTAGCMsg
 import logging
+import json
 
 # logging.basicConfig(format='[%(asctime)s] %(levelname)s %(name)s: %(message)s', level=logging.DEBUG)
 client = SteamClient()
@@ -12,9 +13,11 @@ def steamLogin():
     print("steam login success")
     # dota.launch()
     friends = client.friends
+
     for f in friends:
         print(f.name)
         print(f.rich_presence)
+        
     
     
 @client.on('ready')
@@ -72,8 +75,10 @@ def print_profile_card(account_id, profile_card):
 def match_details_handler():
     print("coming to match details handler")
 
-client.cli_login('RikiMaru12972','BudLight@8712')
-client.run_forever()
+with open('steam_credentials.json') as f:
+    steam_credentials = json.loads(f.read())
+    client.cli_login(steam_credentials['steam_username'],steam_credentials['steam_password'])
+    client.run_forever()
 
 
 
